@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>0000 unsortiert</title>
+    <meta name="description" content="">
+    <meta name="author" content="None">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <!-- non-retina iPhone vor iOS 7 -->
+    <link rel="apple-touch-icon" href="static/icon57.png" sizes="57x57">
+    <!-- non-retina iPad vor iOS 7 -->
+    <link rel="apple-touch-icon" href="static/icon72.png" sizes="72x72">
+    <!-- non-retina iPad iOS 7 -->
+    <link rel="apple-touch-icon" href="static/icon76.png" sizes="76x76">
+    <!-- retina iPhone vor iOS 7 -->
+    <link rel="apple-touch-icon" href="static/icon114.png" sizes="114x114">
+    <!-- retina iPhone iOS 7 -->
+    <link rel="apple-touch-icon" href="static/icon120.png" sizes="120x120">
+    <!-- retina iPad vor iOS 7 -->
+    <link rel="apple-touch-icon" href="static/icon144.png" sizes="144x144">
+    <!-- retina iPad iOS 7 -->
+    <link rel="apple-touch-icon" href="static/icon152.png" sizes="152x152">
+    <!-- retina iPad iOS 7 für iPhone 6 Plus -->
+    <link rel="apple-touch-icon" href="static/icon180.png" sizes="180x180">
+    <!--Android (ältere Versionen)-->
+    <link rel="shortcut icon" href="static/icon196.png" sizes="196x196">
+
+    <link rel="stylesheet" href="static/styles.min.css">
+    <link rel="stylesheet" href="static/styles.css">
+    <script src="static/photoswipe.min.js"></script>
+    <script src="static/photoswipe-ui-default.min.js"></script>
+    <script src="static/echo/echo.min.js"></script>
+    <script src="static/jquery-3.1.0.js"></script>
+    <script>
+
+    // Mobile Safari in standalone mode
+    if(("standalone" in window.navigator) && window.navigator.standalone){
+        // If you want to prevent remote links in standalone web apps opening Mobile Safari, change 'remotes' to true
+        var noddy, remotes = true;
+
+        document.addEventListener('click', function(event) {
+
+            noddy = event.target;
+
+            // Bubble up until we hit link or top HTML element. Warning: BODY element is not compulsory so better to stop on HTML
+            while(noddy.nodeName !== "A" && noddy.nodeName !== "HTML") {
+                noddy = noddy.parentNode;
+            }
+            if(('href' in noddy && noddy.href.indexOf('http') !== -1 && (noddy.href.indexOf(document.location.host) !== -1 || remotes)))
+            {
+                if (noddy.href.endsWith('/') == true) {
+                    event.preventDefault();
+                    document.location.href = noddy.href;
+                }
+            }
+
+        },false);
+    }
+    </script>
+  </head>
+  <body>
+  <div class="container">
+    <div class="content">
+      <div class="album-list">  
