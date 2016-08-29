@@ -15,16 +15,21 @@ cat build_header.txt > $DESTDIR/index.html
 for i in $(ls $SOURCEDIR); do
 	#check if it is a directory
 	if [ ! -d "$SOURCEDIR/$i" ]; then
-		continue;
+		continue
+	fi
+	FILECNT=find "$SOURCEDIR/$i" | grep -i "jpg" | wc -l
+	if [ "$FILECNT" -lt "1" ]; then
+		echo "skip directory $SOURCEDIR/$i"
+		continue
 	fi
 	#check if it has to be build
 	if [ ! -f "$SOURCEDIR/$i/_nosigal" ]; then
 		date >> $BUILDLOG
-		sigal build --title "$i" --verbose "$SOURCEDIR/$i" "$DESTDIR/$i" 
+		sigal build --title "$i" --verbose "$SOURCEDIR/$i" "$DESTDIR/$i"
 	fi
 
 	echo "        <div class=\"menu-img thumbnail\">" >> $DESTDIR/index.html
-	echo "          <a href=\"./$i/index.html\">" >> $DESTDIR/index.html
+	echo "          <a href=\"./$i/\">" >> $DESTDIR/index.html
 	echo -n "          <img src=\"" >> $DESTDIR/index.html
 	find "$DESTDIR/$i" | grep -i "thumbnails/.*.jpg" | sort | head -1 | sed "s/^""$WEBBASE""//g" | tr -d '\n' >> $DESTDIR/index.html
 	echo "\" class=\"albumb_thumb\" alt=\"$i\" title=\"$i\" /></a>" >> $DESTDIR/index.html
