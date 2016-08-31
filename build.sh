@@ -5,41 +5,34 @@ IFS=$(echo -en "\n\b")
 SOURCEDIR="/mnt/DATEN/Bilder/Archiv"
 DESTDIR="/var/www/html"
 WEBBASE="\/var\/www\/html"
+TMPFILE=$DESTDIR/_index.html
+DSTFILE=$DESTDIR/index.html
 
-BUILDLOG="/var/www/buildlog.txt"
+cat build_header.txt > $TMPFILE
 
-date > $BUILDLOG
-
-cat build_header.txt > $DESTDIR/index.html
-
-for i in $(ls $SOURCEDIR); do
+for i in $(ls $SOURCEDIR | sort -r); do
 	#check if it is a directory
 	if [ ! -d "$SOURCEDIR/$i" ]; then
-		continue
-	fi
-	FILECNT=find "$SOURCEDIR/$i" | grep -i "jpg" | wc -l
-	if [ "$FILECNT" -lt "1" ]; then
-		echo "skip directory $SOURCEDIR/$i"
-		continue
+		continue;
 	fi
 	#check if it has to be build
 	if [ ! -f "$SOURCEDIR/$i/_nosigal" ]; then
-		date >> $BUILDLOG
-		sigal build --title "$i" --verbose "$SOURCEDIR/$i" "$DESTDIR/$i"
+		sigal build --title "$i" --verbose "$SOURCEDIR/$i" "$DESTDIR/$i" 
 	fi
 
-	echo "        <div class=\"menu-img thumbnail\">" >> $DESTDIR/index.html
-	echo "          <a href=\"./$i/\">" >> $DESTDIR/index.html
-	echo -n "          <img src=\"" >> $DESTDIR/index.html
-	find "$DESTDIR/$i" | grep -i "thumbnails/.*.jpg" | sort | head -1 | sed "s/^""$WEBBASE""//g" | tr -d '\n' >> $DESTDIR/index.html
-	echo "\" class=\"albumb_thumb\" alt=\"$i\" title=\"$i\" /></a>" >> $DESTDIR/index.html
-	echo "          <span class=\"album_title\">$i</span>" >> $DESTDIR/index.html
-	echo "        </div>" >> $DESTDIR/index.html
+	echo "        <a href=\"./$i/\">" >> $TMPFILE
+	echo "          <div class=\"menu-img thumbnail\">" >> $TMPFILE
+	echo -n "          <img src=\"" >> $TMPFILE
+	find "$DESTDIR/$i" | grep -i "thumbnails/.*.jpg" | sort | head -1 | sed "s/^""$WEBBASE""//g" | tr -d '\n' >> $TMPFILE
+	echo "\" class=\"album_thumb\" alt=\"$i\" title=\"$i\" />" >> $TMPFILE
+	echo "            <span class=\"album_title\">$i</span>" >> $TMPFILE
+	echo "          </div>" >> $TMPFILE
+	echo "        </a>" >> $TMPFILE
 done
 
-cat build_footer.txt >> $DESTDIR/index.html
+cat build_footer.txt >> $TMPFILE
 
-date >> $BUILDLOG
+cp $TMPFILE $DSTFILE
 
 IFS=$SAVEIFS
 
